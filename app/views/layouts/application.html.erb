@@ -8,7 +8,33 @@
 </head>
 <body>
 
-<%= yield %>
+  <header>
+    <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <%= link_to "Events", events_path %>
+          </li>
+          <li>
+            <a href="#">My Events</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav pull-right">
+          <% if user_signed_in? %>
+          <li><%= link_to "#{current_user.email}" %></li>
+          <li class="active"><%= link_to "Logout", destroy_user_session_path%></li>
+          <% else %>
+          <li><%= link_to "Login", new_user_session_path %></li>
+          <li class="active"><%= link_to "Sign Up", new_user_registration_path%></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <%= yield %>
+  </div>
 
 </body>
 </html>
