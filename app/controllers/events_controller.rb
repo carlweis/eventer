@@ -3,6 +3,15 @@ class EventsController < ApplicationController
   before_filter :event_owner!, only: [:edit, :update, :destroy]
   before_action :set_event, only: [:show, :edit, :update, :destroy]
 
+  friendly_id :slug_candidates, use: :slugged
+
+  def slug_candidates
+    [
+      :title,
+      [:title, :location],
+    ]
+  end
+
   # GET /events
   # GET /events.json
   def index
