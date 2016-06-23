@@ -41,10 +41,31 @@
   <% end %>
 </p>
 
+<% if user_signed_in? && @event.organizer_id == current_user.id%>
+  <label>Join Requests</label>
+  <% if @pending_requests.present? %>
+    <% @pending_requests.each do |p| %>
+      <%= image_tag avatar_url(p.user) %>
+      <%= p.user.email %>
+        <%= link_to 'Accept',
+          event_accept_request_path(:event_id => @event.id,
+            :attendance_id => p.id), :class => "btn btn-success btn-sm"  %>
+        <%= link_to 'Reject',
+          event_reject_request_path(:event_id => @event.id,
+            :attendance_id => p.id), :class => "btn btn-danger btn-sm" %>
+    <% end %>
+  <% else %>
+    <p> No Pending Requests for this event</p>
+  <% end %>
+<% end %>
+
 <p>
   <strong>Tags:</strong>
   <%= @event.all_tags %>
 </p>
+
+<%= link_to "Join",
+  event_join_path(:event_id => @event.id), :class => "btn btn-success btn-sm" %>
 
 <%= link_to 'Edit', edit_event_path(@event) %> |
 <%= link_to 'Back', events_path %>

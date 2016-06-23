@@ -5,6 +5,9 @@ class Event < ActiveRecord::Base
   has_many :taggings
   has_many :tags, through: :taggings
 
+  def self.pending_requests(event_id)
+    Attendance.where(event_id: event_id, state: 'request_sent')
+  end
 
   def slug_candidates
     [
