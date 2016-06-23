@@ -31,8 +31,19 @@
 </p>
 
 <p>
-  <strong>Organizer:</strong>
-  <%= @event.organizer_id %>
+  <strong>Organizers:</strong>
+  <% if @event_owners %>
+    <% @event_owners.each do |event_owner| %>
+    <%= image_tag avatar_url(event_owner) %>
+    <%= event_owner.email %>
+    <br/>
+    <% end %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Tags:</strong>
+  <%= @event.all_tags %>
 </p>
 
 <%= link_to 'Edit', edit_event_path(@event) %> |

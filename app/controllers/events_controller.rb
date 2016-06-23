@@ -3,24 +3,22 @@ class EventsController < ApplicationController
   before_filter :event_owner!, only: [:edit, :update, :destroy]
   before_action :set_event, only: [:show, :edit, :update, :destroy]
 
-  friendly_id :slug_candidates, use: :slugged
 
-  def slug_candidates
-    [
-      :title,
-      [:title, :location],
-    ]
-  end
 
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    if params[:tag]
+      @events = Event.tagged_with(params[:tag])
+    else
+      @events = Event.all
+    end
   end
 
   # GET /events/1
   # GET /events/1.json
   def show
+    @event_owners = @event.organizers
   end
 
   # GET /events/new
@@ -85,11 +83,12 @@ class EventsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = Event.where(slug: params[:id]).take
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :start_date, :end_date, :location, :agenda, :address, :organizer_id)
+      params.require(:event).permit(:title, :start_date, :end_date,
+        :location, :agenda, :address, :organizer_id, :all_tags, :slug)
     end
 end
